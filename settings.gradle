@@ -1,2 +1,4 @@
 rootProject.name = 'genetic-sim'
+include 'src:main:agh.ics.oop'
+findProject(':src:main:agh.ics.oop')?.name = 'agh.ics.oop'
 
