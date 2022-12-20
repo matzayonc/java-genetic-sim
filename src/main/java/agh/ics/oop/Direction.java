@@ -96,4 +96,8 @@ public enum Direction {
         int after = this.toIndex()+index%8;
         return Direction.toDirection(after);
     }
+
+    public static Direction random() {
+        return Direction.toDirection((int)(Math.random()*8));
+    }
 }

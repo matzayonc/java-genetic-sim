@@ -1,6 +1,6 @@
 package agh.ics.oop.map;
 
-import agh.ics.oop.element.AbstractElement;
+import agh.ics.oop.gui.AbstractElement;
 import agh.ics.oop.Vector2d;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ public class AbstractMap {
     protected Vector2d size ;
     protected Map<Vector2d, AbstractElement> entities = new HashMap<>();
 
-    AbstractMap(Vector2d size){
+    public AbstractMap(Vector2d size){
         this.size = size;
     }
 

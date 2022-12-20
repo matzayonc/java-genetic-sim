@@ -1,4 +1,6 @@
-package agh.ics.oop.element;
+package agh.ics.oop.life;
+
+import agh.ics.oop.gui.AbstractElement;
 
 import java.io.FileNotFoundException;
 

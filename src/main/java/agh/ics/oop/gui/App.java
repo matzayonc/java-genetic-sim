@@ -1,5 +1,7 @@
 package agh.ics.oop.gui;
+import agh.ics.oop.Vector2d;
 import agh.ics.oop.map.AbstractMap;
+import agh.ics.oop.map.Earth;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -11,7 +13,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         Label label = new Label("Zwierzak");
 
-        AbstractMap map = new AbstractMap();
+        AbstractMap map = new Earth(new Vector2d(4, 5));
 
         GridPane grid = new GridPane();
         grid.setGridLinesVisible(true);
