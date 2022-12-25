@@ -4,8 +4,8 @@ import agh.ics.oop.gui.AbstractElement;
 
 import java.io.FileNotFoundException;
 
-public class Grass extends AbstractElement {
-    public Grass() throws FileNotFoundException {
+public class Plant extends AbstractElement {
+    public Plant() throws FileNotFoundException {
         super("grass.png");
     }
 }
