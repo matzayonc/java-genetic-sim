@@ -6,6 +6,6 @@ import java.io.FileNotFoundException;
 
 public class Plant extends AbstractElement {
     public Plant() throws FileNotFoundException {
-        super("grass.png");
+        super("grass.png", 1);
     }
 }

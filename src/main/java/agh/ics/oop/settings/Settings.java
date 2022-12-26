@@ -22,6 +22,67 @@ public class Settings {
     private int reproductionEnergy = 5;
     private int minimumChildEnergy = 1;
     private int maximumChildEnergy = 3;
+
+    public Vector2d getMapSize() {
+        return mapSize;
+    }
+
+    public MapVariant getMapVariant() {
+        return mapVariant;
+    }
+
+    public int getStartPlantCount() {
+        return startPlantCount;
+    }
+
+    public int getEnergyPerPlant() {
+        return energyPerPlant;
+    }
+
+    public int getPlantsPerCycle() {
+        return plantsPerCycle;
+    }
+
+    public GrowthVariant getGrowthVariant() {
+        return growthVariant;
+    }
+
+    public int getStartAnimalCount() {
+        return startAnimalCount;
+    }
+
+    public int getStartEnergy() {
+        return startEnergy;
+    }
+
+    public int getFertileEnergy() {
+        return fertileEnergy;
+    }
+
+    public int getReproductionEnergy() {
+        return reproductionEnergy;
+    }
+
+    public int getMinimumChildEnergy() {
+        return minimumChildEnergy;
+    }
+
+    public int getMaximumChildEnergy() {
+        return maximumChildEnergy;
+    }
+
+    public MutationVariant getMutationVariant() {
+        return mutationVariant;
+    }
+
+    public int getGenomeLength() {
+        return genomeLength;
+    }
+
+    public BehaviourVariant getBehaviourVariant() {
+        return behaviourVariant;
+    }
+
     private MutationVariant mutationVariant = MutationVariant.FULL_VARIABILITY;
     private int genomeLength = 5;
     private BehaviourVariant behaviourVariant = BehaviourVariant.PREDICTABLE;
@@ -57,7 +118,6 @@ public class Settings {
 
         for (String string : strings) {
             if(string.length() == 0) continue;
-            System.out.println(string);
             String[] keyValue = string.split(": ");
             String key = keyValue[0];
             String value = keyValue[1];

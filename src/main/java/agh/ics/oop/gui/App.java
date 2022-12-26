@@ -1,14 +1,18 @@
 package agh.ics.oop.gui;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.life.Animal;
+import agh.ics.oop.life.Plant;
 import agh.ics.oop.map.AbstractMap;
 import agh.ics.oop.map.Earth;
 import agh.ics.oop.settings.Settings;
 import javafx.application.Application;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -35,7 +39,6 @@ public class App extends Application {
             Button button = new Button(preset);
             button.setOnAction(ev -> {
                 try {
-                    System.out.println(Settings.load(preset).toString());
                     this.open(preset);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -54,22 +57,48 @@ public class App extends Application {
         Stage primaryStage = new Stage();
         Settings settings = Settings.load(preset);
 
-        Label label = new Label("Zwierzak");
-
-        AbstractMap map = new Earth(new Vector2d(4, 5));
+        AbstractMap map = new Earth(settings.getMapSize());
 
         GridPane grid = new GridPane();
         grid.setGridLinesVisible(true);
-        grid.add(label, 0, 0);
-        grid.add(new Label("Zwierzak"), 5, 3);
-
-        Scene scene = new Scene(grid, 400, 400);
 
         Animal animal = new Animal(0);
+        Animal anima2l = new Animal(5);
+        Plant plant = new Plant();
+
+        map.addElement(anima2l, new Vector2d(0, 0));
+        map.addElement(animal, new Vector2d(0, 3));
+        map.addElement(plant, new Vector2d(1, 2));
+
+        for (int i = 0; i < map.getWidth(); i++) {
+            for (int j = 0; j < map.getHeight(); j++) {
+                VBox box = new VBox();
+                box.setPrefSize(30, 30);
+
+                AbstractElement getElement = map.getToShow(new Vector2d(i, j));
+                if (getElement == null) {
+                    box.getChildren().add(new Label("x"));
+                } else {
+                    System.out.println("here");
+                    box.getChildren().add(getElement.getImage());
+                }
+
+                GridPane.setHalignment(box, HPos.CENTER);
+                GridPane.setValignment(box, VPos.CENTER);
+                grid.add(box, i, j);
+            }
+        }
+
+
+
+            Scene scene = new Scene(grid, 400, 400);
+
 
 
         primaryStage.setScene(scene);
-        primaryStage.show();    }
+        primaryStage.show();
+    }
+
 
     void refresh() {
 

@@ -12,7 +12,7 @@ public class Animal extends AbstractElement {
     int childrenCount = 0;
 
     public Animal(int creationTurn) throws FileNotFoundException {
-        super("animal.png");
+        super("animal.png", 0);
         this.creationCycle = creationTurn;
     }
 
