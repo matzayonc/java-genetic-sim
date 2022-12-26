@@ -17,6 +17,43 @@ import java.io.IOException;
 public class App extends Application {
 
     public void start(Stage primaryStage) throws Exception {
+
+        Label label = new Label("Select settings from preset");
+
+
+
+        GridPane grid = new GridPane();
+        grid.setGridLinesVisible(false);
+        grid.add(label, 0, 0);
+
+        Scene scene = new Scene(grid, 300, 400);
+
+        int row = 3;
+
+        for(String preset : Settings.list()) {
+
+            Button button = new Button(preset);
+            button.setOnAction(ev -> {
+                try {
+                    System.out.println(Settings.load(preset).toString());
+                    this.open(preset);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            button.setAlignment(javafx.geometry.Pos.CENTER);
+            grid.add(button, 0, row++);
+        }
+
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public void open(String preset) throws IOException {
+        Stage primaryStage = new Stage();
+        Settings settings = Settings.load(preset);
+
         Label label = new Label("Zwierzak");
 
         AbstractMap map = new Earth(new Vector2d(4, 5));
@@ -30,26 +67,9 @@ public class App extends Application {
 
         Animal animal = new Animal(0);
 
-        for(String preset : Settings.list()) {
-            System.out.println(preset);
-
-            Button button = new Button(preset);
-            button.setOnAction(ev -> {
-                try {
-                    System.out.println(Settings.load(preset).toString());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            grid.add(button, 0, 0);
-        }
-
-
-
 
         primaryStage.setScene(scene);
-        primaryStage.show();
-    }
+        primaryStage.show();    }
 
     void refresh() {
 
