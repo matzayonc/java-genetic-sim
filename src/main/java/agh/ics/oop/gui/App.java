@@ -1,4 +1,5 @@
 package agh.ics.oop.gui;
+import agh.ics.oop.Engine;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.life.Animal;
 import agh.ics.oop.life.Plant;
@@ -6,6 +7,7 @@ import agh.ics.oop.map.AbstractMap;
 import agh.ics.oop.map.Earth;
 import agh.ics.oop.settings.Settings;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -26,11 +28,11 @@ import java.util.concurrent.*;
 
 public class App extends Application {
 
+    public static Engine engine = new Engine();
+
     public void start(Stage primaryStage) throws Exception {
 
         Label label = new Label("Select settings from preset");
-
-        List<Runnable> tasks = new LinkedList();
 
         VBox box = new VBox();
         box.setSpacing(10);
@@ -39,7 +41,7 @@ public class App extends Application {
 
         Scene scene = new Scene(box, 300, 400);
 
-        int row = 3;
+        Engine.app = this;
 
         for(String preset : Settings.list()) {
 
@@ -47,9 +49,7 @@ public class App extends Application {
 
             button.setOnAction(ev -> {
                 try {
-                    Runnable task = this.open(preset);
-                    task.run();
-                    tasks.add(task);
+                     this.open(preset);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {
@@ -63,14 +63,16 @@ public class App extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-        System.out.println("Showing");
 
-//        while (true) {
-//            tasks.forEach(Runnable::run);
-//        }
+        Thread engineThread = new Thread(engine::run);
+        engineThread.start();
     }
 
-    public Runnable open(String preset) throws IOException, InterruptedException {
+    public void update(Runnable task){
+        Platform.runLater(task);
+    }
+
+    public void open(String preset) throws IOException, InterruptedException {
         Stage primaryStage = new Stage();
         Settings settings = Settings.load(preset);
 
@@ -101,20 +103,14 @@ public class App extends Application {
 //
 //            Thread.sleep(5000);
 //        }
+        grid.setGridLinesVisible(true);
 
         Runnable callableTask = () -> {
-            try {
-                TimeUnit.MILLISECONDS.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
             System.out.println("Animals: " + map.getAnimalCount());
             refresh(grid, map);
-            grid.setGridLinesVisible(true);
         };
 
-        return callableTask;
+        engine.add(callableTask, map);
     }
 
 

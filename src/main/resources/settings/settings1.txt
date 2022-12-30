@@ -1,8 +1,8 @@
 Map size: 5x4
 Map variant: Earth
 Start plant count: 5
-Energy per plant: 1
-Plants per cycle: 1
+Energy per plant: 5
+Plants per cycle: 2
 Growth variant: Equator
 Start animal count: 5
 Start energy: 10
