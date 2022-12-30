@@ -36,14 +36,15 @@ public class Genome {
     }
 
     public Direction getActiveGene() {
-        return genes.get(activeGene);
+        return genes.get(activeGene + geneCount % geneCount);
     }
 
     public Genome combine(Genome other, int proportion, Settings settings) {
         List<Direction> combination = genes.subList(0, proportion);
         combination.addAll(other.genes.subList(proportion, other.geneCount));
 
-        while (Math.random() < 0.6) {
+        int c = 0;
+        while ((Math.random() < 0.6 || c++ < settings.getMinimumMutations()) && c < settings.getMaximumMutations()) {
             int index = (int) (Math.random() * geneCount);
             Direction value = switch (settings.getMutationVariant()) {
                 case FULL_VARIABILITY -> Direction.random();

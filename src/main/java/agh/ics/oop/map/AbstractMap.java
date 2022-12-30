@@ -6,13 +6,14 @@ import agh.ics.oop.life.Animal;
 import agh.ics.oop.life.Plant;
 import agh.ics.oop.settings.Settings;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class AbstractMap {
-    protected Map<Vector2d, Field> entities = new HashMap<>();
+    protected Map<Vector2d, Field> entries = new HashMap<>();
 
     int turn = 0;
 
@@ -26,10 +27,10 @@ public class AbstractMap {
     Settings settings;
 
     public Field getField(Vector2d position){
-        Field field = entities.get(position);
+        Field field = entries.get(position);
         if (field == null){
             field = new Field(position, this);
-            entities.put(position, field);
+            entries.put(position, field);
         }
         return field;
     }
@@ -43,11 +44,11 @@ public class AbstractMap {
     }
 
     public Field getElement(Vector2d position){
-        return entities.get(position);
+        return entries.get(position);
     }
 
     public boolean isOccupied(Vector2d position){
-        return entities.containsKey(position);
+        return entries.containsKey(position);
     }
 
     public int getWidth(){
@@ -60,7 +61,7 @@ public class AbstractMap {
 
     public int getTurn() {return turn;}
     public AbstractElement getToShow(Vector2d position){
-        Field field = entities.get(position);
+        Field field = entries.get(position);
         if(field == null){
             return null;
         }
@@ -68,12 +69,12 @@ public class AbstractMap {
     }
 
     public int getAnimalCount() {
-        return entities.values().stream().reduce(0, (sum, field) -> sum + field.animals.size(), Integer::sum);
+        return entries.values().stream().reduce(0, (sum, field) -> sum + field.animals.size(), Integer::sum);
     }
 
     public void tickMove() {
         List<Animal> moving = new LinkedList<>();
-        for(Field f: entities.values()){
+        for(Field f: entries.values()){
             while (!f.animals.isEmpty()){
                 Animal animal = f.animals.get(0);
                 f.animals.remove(0);
@@ -107,10 +108,68 @@ public class AbstractMap {
 
     public void tick() {
         turn++;
-        entities.values().forEach(Field::tickEnergy);
-        entities.values().forEach(Field::tickDie);
+        entries.values().forEach(Field::tickEnergy);
+        entries.values().forEach(Field::tickDie);
         tickMove();
-        entities.values().forEach(Field::tickEat);
-        entities.values().forEach(Field::tickReproduce);
+        entries.values().forEach(Field::tickEat);
+        entries.values().forEach(Field::tickReproduce);
+        tickGrow();
+    }
+
+    public void tickGrow() {
+        for(int i = 0; i < settings.getPlantsPerCycle(); i++){
+            Vector2d position = Vector2d.random(settings.getMapSize());
+
+            switch (settings.getGrowthVariant()) {
+                case EQUATOR -> {
+                    int third = settings.getMapSize().getY() + 4 / 5;
+                    int y = (int) (Math.random() * third);
+
+                    // Likely case, only from among best fields
+                    if(Math.random() > 0.8) {
+                        position = new Vector2d((int) (Math.random() * settings.getMapSize().getX()), y + third);
+                    } else if(Math.random() > 0.5) {
+                        // Below equator
+                        position = new Vector2d((int) (Math.random() * settings.getMapSize().getX()), y);
+                    } else {
+                        // Above equator
+                        position = new Vector2d((int) (Math.random() * settings.getMapSize().getX()),
+                                settings.getMapSize().getY() - 1 - y);
+                    }
+                }
+
+                case TOXIC -> {
+                    boolean onPreferred = Math.random() < 0.8;
+                    int size = settings.getMapSize().getX() * settings.getMapSize().getY();
+                    List<Vector2d> preferred = entries.values().stream()
+                            .sorted((f1, f2) -> f2.deadAnimals - f1.deadAnimals)
+                            .limit(size/5)
+                            .map(f -> f.getPosition())
+                            .collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
+
+                    while (preferred.contains(position) != onPreferred) {
+                        position = Vector2d.random(settings.getMapSize());
+                    }
+
+                    try {
+                        Plant plant = new Plant();
+                        addPlant(plant, position); // allows for growth on top of other plants
+                    } catch (IllegalArgumentException e) {
+                        throw new RuntimeException(e);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            try {
+                Plant plant = new Plant();
+                addPlant(plant, position); // allows for growth on top of other plants
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(e);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

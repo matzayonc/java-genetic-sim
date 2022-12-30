@@ -1,4 +1,4 @@
-Map size: 5x4
+Map size: 7x5
 Map variant: Earth
 Start plant count: 5
 Energy per plant: 5

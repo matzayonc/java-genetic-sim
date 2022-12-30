@@ -41,10 +41,11 @@ public class Field {
     }
 
     public void tickDie(){
-        for (Animal dead: animals) {
-            if (dead.isDead()) {
+        for (int i = 0; i < animals.size(); i++) {
+            if (animals.get(i).isDead()) {
                 deadAnimals++;
-                animals.remove(dead);
+                animals.remove(i);
+                i--;
             }
         }
     }

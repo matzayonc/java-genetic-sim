@@ -82,35 +82,19 @@ public class App extends Application {
         grid.setGridLinesVisible(true);
 
 
-        Animal animal = new Animal(0, new Vector2d(0, 0), settings);
-        Animal anima2l = new Animal(5, new Vector2d(0, 3), settings);
-        Plant plant = new Plant();
+        for(int i = 0; i < settings.getStartAnimalCount(); i++)
+            map.addAnimal(new Animal(0, Vector2d.random(settings.getMapSize()), settings));
 
-        map.addAnimal(anima2l);
-        map.addAnimal(animal);
-        map.addPlant(plant, new Vector2d(1, 2));
 
         primaryStage.setScene(new Scene(grid, 400, 400));
         primaryStage.show();
 
-        int c = 3;
-
-//        while (c-- > 0) {
-//            System.out.println("Animals: " + map.getAnimalCount());
-//
-//            refresh(grid, map);
-//            grid.setGridLinesVisible(true);
-//
-//            Thread.sleep(5000);
-//        }
-        grid.setGridLinesVisible(true);
-
-        Runnable callableTask = () -> {
+        Runnable task = () -> {
             System.out.println("Animals: " + map.getAnimalCount());
             refresh(grid, map);
         };
 
-        engine.add(callableTask, map);
+        engine.add(task, map);
     }
 
 
@@ -127,7 +111,6 @@ public class App extends Application {
                 if (getElement == null) {
                     box.getChildren().add(new Label("x"));
                 } else {
-                    System.out.println("here");
                     box.getChildren().add(getElement.getImage());
                 }
 

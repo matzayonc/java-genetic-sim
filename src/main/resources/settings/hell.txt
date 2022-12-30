@@ -1,5 +1,5 @@
-Map size: 5x4
-Map variant: Earth
+Map size: 20x5
+Map variant: Hell
 Start plant count: 5
 Energy per plant: 5
 Plants per cycle: 2

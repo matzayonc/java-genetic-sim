@@ -68,11 +68,11 @@ public class Settings {
         return reproductionEnergy;
     }
 
-    public int getMinimumChildEnergy() {
+    public int getMinimumMutations() {
         return minimumChildEnergy;
     }
 
-    public int getMaximumChildEnergy() {
+    public int getMaximumMutations() {
         return maximumChildEnergy;
     }
 
