@@ -69,7 +69,7 @@ public enum Direction {
         }
     }
 
-    static Direction toDirection(int index) {
+    public static Direction toDirection(int index) {
         switch (index) {
             case 0:
                 return NORTH;
@@ -91,13 +91,47 @@ public enum Direction {
                 return null;
         }
     }
-
-    Direction modify(int index) {
-        int after = this.toIndex()+index%8;
+    public Direction add(Direction direction) {
+        int after = (this.toIndex() + direction.toIndex()) % 8;
         return Direction.toDirection(after);
     }
 
     public static Direction random() {
         return Direction.toDirection((int)(Math.random()*8));
+    }
+
+    public Vector2d toUnitVector() {
+        return new Vector2d(this.getX(), this.getY());
+    }
+
+    public Direction opposite() {
+        switch (this) {
+            case NORTH:
+                return SOUTH;
+            case NORTHEAST:
+                return SOUTHWEST;
+            case EAST:
+                return WEST;
+            case SOUTHEAST:
+                return NORTHWEST;
+            case SOUTH:
+                return NORTH;
+            case SOUTHWEST:
+                return NORTHEAST;
+            case WEST:
+                return EAST;
+            case NORTHWEST:
+                return SOUTHEAST;
+            default:
+                return null;
+        }
+    }
+
+    public Direction similar() {
+        if(Math.random() > 0.5) {
+            return this.add(Direction.NORTHEAST);
+        } else {
+            return this.add(Direction.NORTHWEST);
+        }
     }
 }

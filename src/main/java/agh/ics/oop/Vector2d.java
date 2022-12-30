@@ -29,11 +29,11 @@ public class Vector2d {
         return this.x + "x" + this.y;
     }
 
-    Vector2d add(Vector2d other) {
+    public Vector2d add(Vector2d other) {
         return new Vector2d(this.x + other.x, this.y + other.y);
     }
 
-    Vector2d subtract(Vector2d other) {
+    public Vector2d subtract(Vector2d other) {
         return new Vector2d(this.x - other.x, this.y - other.y);
     }
 
@@ -45,5 +45,11 @@ public class Vector2d {
         return this.y;
     }
 
+    public static Vector2d random(Vector2d limit) {
+        return new Vector2d((int) (Math.random() * limit.x), (int) (Math.random() * limit.y));
+    }
 
+    public boolean positiveAndBelow(Vector2d limit){
+        return this.x >= 0 && this.y >= 0 && this.x < limit.x && this.y < limit.y;
+    }
 }

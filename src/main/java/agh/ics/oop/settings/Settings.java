@@ -22,6 +22,11 @@ public class Settings {
     private int reproductionEnergy = 5;
     private int minimumChildEnergy = 1;
     private int maximumChildEnergy = 3;
+    private MutationVariant mutationVariant = MutationVariant.FULL_VARIABILITY;
+    private int genomeLength = 5;
+    private BehaviourVariant behaviourVariant = BehaviourVariant.PREDICTABLE;
+
+    static public String path = "src/main/resources/settings";
 
     public Vector2d getMapSize() {
         return mapSize;
@@ -83,11 +88,6 @@ public class Settings {
         return behaviourVariant;
     }
 
-    private MutationVariant mutationVariant = MutationVariant.FULL_VARIABILITY;
-    private int genomeLength = 5;
-    private BehaviourVariant behaviourVariant = BehaviourVariant.PREDICTABLE;
-
-    static public String path = "src/main/resources/settings";
 
     public String toString() {
         String[] strings = {
