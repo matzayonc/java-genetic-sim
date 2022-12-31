@@ -2,10 +2,10 @@ package agh.ics.oop.gui;
 import agh.ics.oop.Engine;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.life.Animal;
-import agh.ics.oop.life.Plant;
 import agh.ics.oop.map.AbstractMap;
 import agh.ics.oop.map.Earth;
 import agh.ics.oop.settings.Settings;
+import agh.ics.oop.stats.MapStats;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -15,15 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.*;
 
 
 public class App extends Application {
@@ -79,26 +74,28 @@ public class App extends Application {
         AbstractMap map = new Earth(settings);
 
         GridPane grid = new GridPane();
+        VBox box = new VBox();
         grid.setGridLinesVisible(true);
 
 
         for(int i = 0; i < settings.getStartAnimalCount(); i++)
             map.addAnimal(new Animal(0, Vector2d.random(settings.getMapSize()), settings));
 
+        box.setPadding(new Insets(10));
 
-        primaryStage.setScene(new Scene(grid, 400, 400));
+
+        primaryStage.setScene(new Scene(box, 400, 400));
         primaryStage.show();
 
         Runnable task = () -> {
             System.out.println("Animals: " + map.getAnimalCount());
-            refresh(grid, map);
+            refresh(box, grid, map);
         };
-
         engine.add(task, map);
     }
 
 
-    void refresh(GridPane grid, AbstractMap map) {
+    void refresh(VBox mainBox, GridPane grid, AbstractMap map) {
         grid.getChildren().clear();
         grid.setGridLinesVisible(true);
 
@@ -119,5 +116,18 @@ public class App extends Application {
                 grid.add(box, i, j);
             }
         }
+
+        MapStats stats = map.getStats();
+        VBox box = new VBox();
+        box.getChildren().add(new Label("Animals: " + stats.getAnimalCount()));
+        box.getChildren().add(new Label("Grass: " + stats.getGrassCount()));
+        box.getChildren().add(new Label("Dominant gene: " + stats.getDominatingGene()));
+        box.getChildren().add(new Label("freeFields: " + stats.getFreeFieldsCount()));
+        box.getChildren().add(new Label("Average energy: " + stats.getAvgEnergy()));
+        box.getChildren().add(new Label("Average age: " + stats.getAvgLifespan()));
+
+        mainBox.getChildren().clear();
+        mainBox.getChildren().add(grid);
+        mainBox.getChildren().add(box);
     }
 }

@@ -14,6 +14,7 @@ public class Field {
 
     public int deadAnimals = 0;
     public int alivePlants = 0;
+    public int totalTickLived;
 
     public List<Animal> animals = new LinkedList<>();
     public List<Plant> plants = new LinkedList<>();
@@ -44,7 +45,8 @@ public class Field {
         for (int i = 0; i < animals.size(); i++) {
             if (animals.get(i).isDead()) {
                 deadAnimals++;
-                animals.remove(i);
+                Animal dead = animals.remove(i);
+                totalTickLived += dead.getAge(map.turn);
                 i--;
             }
         }

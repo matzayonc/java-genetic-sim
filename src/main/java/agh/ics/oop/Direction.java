@@ -46,7 +46,7 @@ public enum Direction {
         }
     }
 
-    int toIndex() {
+    public int toIndex() {
         switch (this) {
             case NORTH:
                 return 0;

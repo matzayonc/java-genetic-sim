@@ -36,12 +36,19 @@ public class Genome {
     }
 
     public Direction getActiveGene() {
-        return genes.get(activeGene + geneCount % geneCount);
+        return genes.get(activeGene);
     }
 
     public Genome combine(Genome other, int proportion, Settings settings) {
         List<Direction> combination = genes.subList(0, proportion);
         combination.addAll(other.genes.subList(proportion, other.geneCount));
+
+        System.out.println("combination: " + combination +
+                "left: " + genes.subList(0, proportion) +
+                "right: " + other.genes.subList(proportion, other.geneCount)+
+                "proportion: " + proportion+
+                "l:"+ genes.size()+ ", r: " + other.genes.size());
+
 
         int c = 0;
         while ((Math.random() < 0.6 || c++ < settings.getMinimumMutations()) && c < settings.getMaximumMutations()) {
@@ -54,5 +61,12 @@ public class Genome {
         }
 
         return new Genome(combination);
+    }
+
+    public String toString() {
+        String result = "";
+        for (Direction d : genes)
+            result += Integer.toString(d.toIndex());
+        return result;
     }
 }

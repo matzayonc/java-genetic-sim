@@ -24,13 +24,23 @@ public class Animal extends AbstractElement {
 
     Vector2d position;
 
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+        this.health = energy;
+    }
+
+    public int getChildrenCount() {
+        return childrenCount;
+    }
+
     public Animal(int creationTurn, Vector2d position, Settings settings) throws FileNotFoundException {
         super("animal.png", 0);
         this.creationCycle = creationTurn;
         this.settings = settings;
         this.position = position;
         genome = new Genome(settings.getGenomeLength());
-        this.energy = settings.getReproductionEnergy() * 2;
+        setEnergy(settings.getReproductionEnergy() * 2);
     }
 
     public Animal(int creationTurn, Vector2d position, Settings settings, Genome genome)
@@ -40,7 +50,7 @@ public class Animal extends AbstractElement {
         this.settings = settings;
         this.position = position;
         this.genome = genome;
-        this.energy = settings.getReproductionEnergy() * 2;
+        setEnergy(settings.getReproductionEnergy() * 2);
     }
 
     public boolean hasPriority(Animal other) {
@@ -102,7 +112,7 @@ public class Animal extends AbstractElement {
     }
 
     public void burnEnergy(int energy) {
-        this.energy -= energy;
+        setEnergy(this.energy - energy);
     }
 
     public boolean isOnMap(Vector2d size) {
@@ -119,6 +129,8 @@ public class Animal extends AbstractElement {
         Genome childGenome = genome.combine(father.genome, mothersGenes, settings);
         this.burnEnergy(settings.getReproductionEnergy());
         father.burnEnergy(settings.getReproductionEnergy());
+        this.childrenCount++;
+        father.childrenCount++;
 
         try {
             return new Animal(turn, this.position, settings, childGenome);
@@ -126,5 +138,17 @@ public class Animal extends AbstractElement {
             System.err.println("File not found in reproduce");
         }
         return null;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public int getAge(int turn) {
+        return turn - creationCycle;
+    }
+
+    public Genome getGenome() {
+        return genome;
     }
 }

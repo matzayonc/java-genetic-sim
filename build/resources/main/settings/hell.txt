@@ -1,0 +1,15 @@
+Map size: 20x5
+Map variant: Hell
+Start plant count: 5
+Energy per plant: 5
+Plants per cycle: 2
+Growth variant: Equator
+Start animal count: 5
+Start energy: 10
+Fertile energy: 5
+Reproduction energy: 5
+Minimum child energy: 1
+Maximum child energy: 3
+Mutation variant: Full variability
+Genome length: 5
+Behaviour variant: Predictable

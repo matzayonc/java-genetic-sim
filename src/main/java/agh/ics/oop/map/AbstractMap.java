@@ -3,8 +3,10 @@ package agh.ics.oop.map;
 import agh.ics.oop.gui.AbstractElement;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.life.Animal;
+import agh.ics.oop.life.Genome;
 import agh.ics.oop.life.Plant;
 import agh.ics.oop.settings.Settings;
+import agh.ics.oop.stats.MapStats;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -14,8 +16,8 @@ import java.util.Map;
 
 public class AbstractMap {
     protected Map<Vector2d, Field> entries = new HashMap<>();
-
     int turn = 0;
+    MapStats stats = new MapStats();
 
     public AbstractMap(Settings settings){
         this.settings = settings;
@@ -25,6 +27,11 @@ public class AbstractMap {
         return settings.getMapSize();
     }
     Settings settings;
+
+    public MapStats getStats(){
+        stats.update(this);
+        return stats;
+    }
 
     public Field getField(Vector2d position){
         Field field = entries.get(position);
@@ -70,6 +77,37 @@ public class AbstractMap {
 
     public int getAnimalCount() {
         return entries.values().stream().reduce(0, (sum, field) -> sum + field.animals.size(), Integer::sum);
+    }
+
+    public int getGrassCount() {
+        return entries.values().stream().reduce(0, (sum, field) -> sum + field.plants.size(), Integer::sum);
+    }
+
+    public int getEmpty(){
+        int nonEmpty = 0;
+        for (Field field : entries.values())
+            if(field.animals.isEmpty() || field.plants.isEmpty())
+                nonEmpty++;
+
+        int size = settings.getMapSize().getX() * settings.getMapSize().getY();
+        return size - nonEmpty;
+    }
+
+    public int getTotalEnergy(){
+        return entries.values().stream()
+                .reduce(0, (sum, field) -> sum + field.animals.stream()
+                        .reduce(0, (sum2, animal) -> sum2 + animal.getEnergy(), Integer::sum), Integer::sum);
+    }
+
+    public Genome getDominantGene() {
+        Animal best = null;
+        for(Field f : entries.values()){
+            for(Animal a : f.animals){
+                if(best == null || a.getChildrenCount() > best.getChildrenCount())
+                    best = a;
+            }
+        }
+        return best.getGenome();
     }
 
     public void tickMove() {
@@ -171,5 +209,15 @@ public class AbstractMap {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public int totalLifespan() {
+        return entries.values().stream()
+                .reduce(0, (sum, field) -> sum + field.totalTickLived, Integer::sum);
+    }
+
+    public int deadAnimals() {
+        return entries.values().stream()
+                .reduce(0, (sum, field) -> sum + field.deadAnimals, Integer::sum);
     }
 }
