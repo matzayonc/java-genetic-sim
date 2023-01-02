@@ -7,9 +7,6 @@ import agh.ics.oop.map.Earth;
 import agh.ics.oop.settings.Settings;
 import agh.ics.oop.stats.MapStats;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -29,7 +26,7 @@ public class App extends Application {
 
     public static Engine engine = new Engine();
 
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         HBox hBox = new HBox();
         hBox.getChildren().add(new Label("Should safe?"));
@@ -58,9 +55,7 @@ public class App extends Application {
             button.setOnAction(ev -> {
                 try {
                      this.open(preset, checkBox.isSelected());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
+                } catch (IOException | InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             });
@@ -72,12 +67,8 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Thread engineThread = new Thread(engine::run);
+        Thread engineThread = new Thread(() -> engine.run());
         engineThread.start();
-    }
-
-    public void update(Runnable task){
-        Platform.runLater(task);
     }
 
     public void open(String preset, boolean save) throws IOException, InterruptedException {
@@ -104,9 +95,7 @@ public class App extends Application {
         if (save)
             map.getStats().createSaveFile(preset);
 
-        Runnable refreshTask = () -> {
-            refresh(box, grid, map);
-        };
+        Runnable refreshTask = () -> refresh(box, grid, map);
         Runnable refreshAndSaveTask = () -> {
             refresh(box, grid, map);
             try {

@@ -11,13 +11,10 @@ public enum MapVariant {
     }
 
     public static MapVariant fromString(String str) throws IllegalArgumentException {
-        switch (str) {
-            case "Earth":
-                return EARTH;
-            case "Hell":
-                return HELL;
-            default:
-                throw new IllegalArgumentException("Unknown map variant");
-        }
+        return switch (str) {
+            case "Earth" -> EARTH;
+            case "Hell" -> HELL;
+            default -> throw new IllegalArgumentException("Unknown map variant");
+        };
     }
 }

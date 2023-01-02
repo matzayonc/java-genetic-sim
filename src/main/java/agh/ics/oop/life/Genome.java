@@ -62,9 +62,9 @@ public class Genome {
     }
 
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Direction d : genes)
-            result += Integer.toString(d.toIndex());
-        return result;
+            result.append(d.toIndex());
+        return result.toString();
     }
 }

@@ -1,11 +1,10 @@
 package agh.ics.oop.stats;
 
-import agh.ics.oop.Direction;
 import agh.ics.oop.life.Genome;
 import agh.ics.oop.map.AbstractMap;
-import agh.ics.oop.settings.Settings;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class MapStats {
     int animalCount;
@@ -52,24 +51,22 @@ public class MapStats {
             return "-";
     }
 
-    public String getDeadAnimalsCount() {
-        return Integer.toString(deadAnimalsCount);
-    }
-
     public String getDominatingGene() {
         return bestGenes.toString();
     }
 
     public void createSaveFile(String preset) throws IOException {
         Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("src/main/resources/stats/"+preset+".csv", true), "UTF-8"));
+                new FileOutputStream("src/main/resources/stats/"+preset+".csv", true),
+                StandardCharsets.UTF_8));
         writer.write("Animal count, Grass count, Free fields count, Dominating gene, Avg energy, Avg lifespan\n");
         writer.close();
     }
 
     public void save(String preset) throws IOException {
         Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("src/main/resources/stats/"+preset+".csv", true), "UTF-8"));
+                new FileOutputStream("src/main/resources/stats/"+preset+".csv", true),
+                StandardCharsets.UTF_8));
         writer.write(animalCount + "," + grassCount + "," + freeFieldsCount + "," + bestGenes.toString() + "," + avgEnergy + "," + avgLifespan + "\n");
         writer.close();
     }

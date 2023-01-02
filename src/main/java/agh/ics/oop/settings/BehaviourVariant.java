@@ -11,13 +11,10 @@ public enum BehaviourVariant {
     }
 
     public static BehaviourVariant fromString(String str) throws IllegalArgumentException {
-        switch (str) {
-            case "Predictable":
-                return PREDICTABLE;
-            case "Unpredictable":
-                return UNPREDICTABLE;
-            default:
-                throw new IllegalArgumentException("Unknown behaviour variant");
-        }
+        return switch (str) {
+            case "Predictable" -> PREDICTABLE;
+            case "Unpredictable" -> UNPREDICTABLE;
+            default -> throw new IllegalArgumentException("Unknown behaviour variant");
+        };
     }
 }

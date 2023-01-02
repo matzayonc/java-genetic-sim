@@ -3,11 +3,9 @@ package agh.ics.oop.life;
 import agh.ics.oop.Direction;
 import agh.ics.oop.Vector2d;
 import agh.ics.oop.gui.AbstractElement;
-import agh.ics.oop.settings.BehaviourVariant;
 import agh.ics.oop.settings.Settings;
 
 import java.io.FileNotFoundException;
-import java.util.Set;
 
 public class Animal extends AbstractElement {
     Direction direction = Direction.random();
@@ -35,7 +33,7 @@ public class Animal extends AbstractElement {
     }
 
     public Animal(int creationTurn, Vector2d position, Settings settings) throws FileNotFoundException {
-        super("animal.png", position,0);
+        super("animal.png", position);
         this.creationCycle = creationTurn;
         this.settings = settings;
         this.position = position;
@@ -45,24 +43,12 @@ public class Animal extends AbstractElement {
 
     public Animal(int creationTurn, Vector2d position, Settings settings, Genome genome)
     throws FileNotFoundException {
-        super("animal.png", position, 0);
+        super("animal.png", position);
         this.creationCycle = creationTurn;
         this.settings = settings;
         this.position = position;
         this.genome = genome;
         setEnergy(settings.getReproductionEnergy() * 2);
-    }
-
-    public boolean hasPriority(Animal other) {
-        if (this.energy != other.energy)
-            return this.energy > other.energy;
-        else if (this.creationCycle != other.creationCycle)
-            return this.creationCycle < other.creationCycle;
-        else if (childrenCount != other.childrenCount)
-            return this.childrenCount > other.childrenCount;
-        else if (this.direction != other.direction)
-            return this.direction.ordinal() < other.direction.ordinal();
-        return true;
     }
 
     public int cmp(Animal other) {

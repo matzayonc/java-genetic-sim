@@ -24,7 +24,7 @@ public class Engine implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            maps.stream().forEach(AbstractMap::tick);
+            maps.forEach(AbstractMap::tick);
 
             for (Runnable task : refreshes) {
                 Platform.runLater(task);
@@ -35,9 +35,5 @@ public class Engine implements Runnable{
     public void add(Runnable task, AbstractMap map){
         refreshes.add(task);
         maps.add(map);
-    }
-
-    public int count(){
-        return refreshes.size();
     }
 }

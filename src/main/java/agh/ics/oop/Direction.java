@@ -1,6 +1,5 @@
 package agh.ics.oop;
 
-import java.security.PublicKey;
 
 public enum Direction {
     NORTH,
@@ -12,84 +11,47 @@ public enum Direction {
     WEST,
     NORTHWEST;
 
-    Vector2d toVector() {
-        return new Vector2d(this.getX(), this.getY());
-    }
-
     int getX() {
-        switch (this) {
-            case WEST:
-            case NORTHWEST:
-            case SOUTHWEST:
-                return -1;
-            case EAST:
-            case NORTHEAST:
-            case SOUTHEAST:
-                return 1;
-            default:
-                return 0;
-        }
+        return switch (this) {
+            case WEST, NORTHWEST, SOUTHWEST -> -1;
+            case EAST, NORTHEAST, SOUTHEAST -> 1;
+            default -> 0;
+        };
     }
 
     int getY() {
-        switch (this) {
-            case NORTH:
-            case NORTHWEST:
-            case NORTHEAST:
-                return 1;
-            case SOUTH:
-            case SOUTHWEST:
-            case SOUTHEAST:
-                return -1;
-            default:
-                return 0;
-        }
+        return switch (this) {
+            case NORTH, NORTHWEST, NORTHEAST -> 1;
+            case SOUTH, SOUTHWEST, SOUTHEAST -> -1;
+            default -> 0;
+        };
     }
 
     public int toIndex() {
-        switch (this) {
-            case NORTH:
-                return 0;
-            case NORTHEAST:
-                return 1;
-            case EAST:
-                return 2;
-            case SOUTHEAST:
-                return 3;
-            case SOUTH:
-                return 4;
-            case SOUTHWEST:
-                return 5;
-            case WEST:
-                return 6;
-            case NORTHWEST:
-                return 7;
-            default:
-                return -1;
-        }
+        return switch (this) {
+            case NORTH -> 0;
+            case NORTHEAST -> 1;
+            case EAST -> 2;
+            case SOUTHEAST -> 3;
+            case SOUTH -> 4;
+            case SOUTHWEST -> 5;
+            case WEST -> 6;
+            case NORTHWEST -> 7;
+        };
     }
 
     public static Direction toDirection(int index) {
-        switch (index) {
-            case 0:
-                return NORTH;
-            case 1:
-                return NORTHEAST;
-            case 2:
-                return EAST;
-            case 3:
-                return SOUTHEAST;
-            case 4:
-                return SOUTH;
-            case 5:
-                return SOUTHWEST;
-            case 6:
-                return WEST;
-            case 7:
-                return NORTHWEST;
-            default:
-                return null;
-        }
+        return switch (index) {
+            case 0 -> NORTH;
+            case 1 -> NORTHEAST;
+            case 2 -> EAST;
+            case 3 -> SOUTHEAST;
+            case 4 -> SOUTH;
+            case 5 -> SOUTHWEST;
+            case 6 -> WEST;
+            case 7 -> NORTHWEST;
+            default -> null;
+        };
     }
     public Direction add(Direction direction) {
         int after = (this.toIndex() + direction.toIndex()) % 8;
@@ -105,26 +67,16 @@ public enum Direction {
     }
 
     public Direction opposite() {
-        switch (this) {
-            case NORTH:
-                return SOUTH;
-            case NORTHEAST:
-                return SOUTHWEST;
-            case EAST:
-                return WEST;
-            case SOUTHEAST:
-                return NORTHWEST;
-            case SOUTH:
-                return NORTH;
-            case SOUTHWEST:
-                return NORTHEAST;
-            case WEST:
-                return EAST;
-            case NORTHWEST:
-                return SOUTHEAST;
-            default:
-                return null;
-        }
+        return switch (this) {
+            case NORTH -> SOUTH;
+            case NORTHEAST -> SOUTHWEST;
+            case EAST -> WEST;
+            case SOUTHEAST -> NORTHWEST;
+            case SOUTH -> NORTH;
+            case SOUTHWEST -> NORTHEAST;
+            case WEST -> EAST;
+            case NORTHWEST -> SOUTHEAST;
+        };
     }
 
     public Direction similar() {

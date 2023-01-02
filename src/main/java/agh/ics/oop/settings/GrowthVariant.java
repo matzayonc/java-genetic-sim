@@ -6,19 +6,16 @@ public enum GrowthVariant {
     public String toString() {
         return switch (this) {
             case EQUATOR -> "Equator";
-            case TOXIC -> "Equator";
+            case TOXIC -> "Toxic";
         };
     }
 
     public static GrowthVariant fromString(String value) {
-        switch (value) {
-            case "Equator":
-                return EQUATOR;
-            case "Toxic":
-                return TOXIC;
-            default:
-                throw new IllegalArgumentException("Unknown growth variant");
-        }
+        return switch (value) {
+            case "Equator" -> EQUATOR;
+            case "Toxic" -> TOXIC;
+            default -> throw new IllegalArgumentException("Unknown growth variant");
+        };
     }
 
 }

@@ -64,7 +64,7 @@ public class Field {
 
     public void tickReproduce() {
         // Took constraint of only one child per turn per animal
-        List<Animal> readyToReproduce = new LinkedList<Animal>();
+        List<Animal> readyToReproduce = new LinkedList<>();
         animals.stream().filter(Animal::canReproduce).forEach(readyToReproduce::add);
         readyToReproduce.sort(Animal::cmp);
 

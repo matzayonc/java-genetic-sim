@@ -50,13 +50,6 @@ public class AbstractMap {
         this.getField(position).plants.add(plant);
     }
 
-    public Field getElement(Vector2d position){
-        return entries.get(position);
-    }
-
-    public boolean isOccupied(Vector2d position){
-        return entries.containsKey(position);
-    }
 
     public int getWidth(){
         return settings.getMapSize().getX();
@@ -109,6 +102,8 @@ public class AbstractMap {
                     best = a;
             }
         }
+        if(best == null)
+            return null;
         return best.getGenome();
     }
 
@@ -120,7 +115,6 @@ public class AbstractMap {
                 f.animals.remove(0);
                 moving.add(animal);
             }
-            f.animals.clear();
         }
         moving.forEach(animal -> {
             animal.rotate();
@@ -162,11 +156,11 @@ public class AbstractMap {
 
             switch (settings.getGrowthVariant()) {
                 case EQUATOR -> {
-                    int third = settings.getMapSize().getY() + 4 / 5;
+                    int third = (settings.getMapSize().getY() + 2) / 3;
                     int y = (int) (Math.random() * third);
 
                     // Likely case, only from among best fields
-                    if(Math.random() > 0.8) {
+                    if(Math.random() < 0.8) {
                         position = new Vector2d((int) (Math.random() * settings.getMapSize().getX()), y + third);
                     } else if(Math.random() > 0.5) {
                         // Below equator
@@ -184,7 +178,7 @@ public class AbstractMap {
                     List<Vector2d> preferred = entries.values().stream()
                             .sorted((f1, f2) -> f2.deadAnimals - f1.deadAnimals)
                             .limit(size/5)
-                            .map(f -> f.getPosition())
+                            .map(Field::getPosition)
                             .collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
 
                     while (preferred.contains(position) != onPreferred) {
@@ -198,9 +192,7 @@ public class AbstractMap {
                             throw new IllegalArgumentException("Position out of map");
 
                         addPlant(plant, position); // allows for growth on top of other plants
-                    } catch (IllegalArgumentException e) {
-                        throw new RuntimeException(e);
-                    } catch (FileNotFoundException e) {
+                    } catch (IllegalArgumentException | FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -209,9 +201,7 @@ public class AbstractMap {
             try {
                 Plant plant = new Plant(position);
                 addPlant(plant, position); // allows for growth on top of other plants
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            } catch (FileNotFoundException e) {
+            } catch (IllegalArgumentException | FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }

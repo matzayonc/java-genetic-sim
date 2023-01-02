@@ -11,14 +11,11 @@ public enum MutationVariant {
     }
 
     public static MutationVariant fromString(String str) throws IllegalArgumentException {
-        switch (str) {
-            case "Full variability":
-                return FULL_VARIABILITY;
-            case "Slight correction":
-                return SLIGHT_CORRECTION;
-            default:
-                throw new IllegalArgumentException("Unknown mutation variant");
-        }
+        return switch (str) {
+            case "Full variability" -> FULL_VARIABILITY;
+            case "Slight correction" -> SLIGHT_CORRECTION;
+            default -> throw new IllegalArgumentException("Unknown mutation variant");
+        };
     }
 
 }

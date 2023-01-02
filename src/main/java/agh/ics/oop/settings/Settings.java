@@ -4,7 +4,7 @@ import agh.ics.oop.Vector2d;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,10 +36,6 @@ public class Settings {
         return mapVariant;
     }
 
-    public int getStartPlantCount() {
-        return startPlantCount;
-    }
-
     public int getEnergyPerPlant() {
         return energyPerPlant;
     }
@@ -54,10 +50,6 @@ public class Settings {
 
     public int getStartAnimalCount() {
         return startAnimalCount;
-    }
-
-    public int getStartEnergy() {
-        return startEnergy;
     }
 
     public int getFertileEnergy() {
@@ -123,69 +115,40 @@ public class Settings {
             String value = keyValue[1];
 
             switch (key) {
-                case "Map size":
-                    int[] coords = Arrays.stream(value.split("x")).mapToInt(Integer::parseInt).toArray();
-                    settings.mapSize = new Vector2d(coords[0], coords[1]);
-                    break;
-                case "Map variant":
-                    settings.mapVariant = MapVariant.fromString(value);
-                    break;
-                case "Start plant count":
-                    settings.startPlantCount = Integer.parseInt(value);
-                    break;
-                case "Energy per plant":
-                    settings.energyPerPlant = Integer.parseInt(value);
-                    break;
-                case "Plants per cycle":
-                    settings.plantsPerCycle = Integer.parseInt(value);
-                    break;
-                case "Growth variant":
-                    settings.growthVariant = GrowthVariant.fromString(value);
-                    break;
-                case "Start animal count":
-                    settings.startAnimalCount = Integer.parseInt(value);
-                    break;
-                case "Start energy":
-                    settings.startEnergy = Integer.parseInt(value);
-                    break;
-                case "Fertile energy":
-                    settings.fertileEnergy = Integer.parseInt(value);
-                    break;
-                case "Reproduction energy":
-                    settings.reproductionEnergy = Integer.parseInt(value);
-                    break;
-                case "Minimum child energy":
-                    settings.minimumChildEnergy = Integer.parseInt(value);
-                    break;
-                case "Maximum child energy":
-                    settings.maximumChildEnergy = Integer.parseInt(value);
-                    break;
-                case "Mutation variant":
-                    settings.mutationVariant = MutationVariant.fromString(value);
-                    break;
-                case "Genome length":
-                    settings.genomeLength = Integer.parseInt(value);
-                    break;
-                case "Behaviour variant":
-                    settings.behaviourVariant = BehaviourVariant.fromString(value);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown key");
+                case "Map size" -> {
+                    int[] cords = Arrays.stream(value.split("x")).mapToInt(Integer::parseInt).toArray();
+                    settings.mapSize = new Vector2d(cords[0], cords[1]);
+                }
+                case "Map variant" -> settings.mapVariant = MapVariant.fromString(value);
+                case "Start plant count" -> settings.startPlantCount = Integer.parseInt(value);
+                case "Energy per plant" -> settings.energyPerPlant = Integer.parseInt(value);
+                case "Plants per cycle" -> settings.plantsPerCycle = Integer.parseInt(value);
+                case "Growth variant" -> settings.growthVariant = GrowthVariant.fromString(value);
+                case "Start animal count" -> settings.startAnimalCount = Integer.parseInt(value);
+                case "Start energy" -> settings.startEnergy = Integer.parseInt(value);
+                case "Fertile energy" -> settings.fertileEnergy = Integer.parseInt(value);
+                case "Reproduction energy" -> settings.reproductionEnergy = Integer.parseInt(value);
+                case "Minimum child energy" -> settings.minimumChildEnergy = Integer.parseInt(value);
+                case "Maximum child energy" -> settings.maximumChildEnergy = Integer.parseInt(value);
+                case "Mutation variant" -> settings.mutationVariant = MutationVariant.fromString(value);
+                case "Genome length" -> settings.genomeLength = Integer.parseInt(value);
+                case "Behaviour variant" -> settings.behaviourVariant = BehaviourVariant.fromString(value);
+                default -> throw new IllegalArgumentException("Unknown key");
             }
         }
 
         return settings;
     }
 
-    public void dump(String path) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(Settings.toPath(path), "UTF-8");
-        writer.println(this.toString());
-        writer.close();
-    }
+//    public void dump(String path) throws IOException {
+//        PrintWriter writer = new PrintWriter(Settings.toPath(path), StandardCharsets.UTF_8);
+//        writer.println(this.toString());
+//        writer.close();
+//    }
 
     public static Settings load(String filename) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(Settings.toPath(filename)));
-        String read = "";
+        String read;
         try {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
@@ -207,13 +170,11 @@ public class Settings {
     static public Set<String> list() {
         File file = new File(Settings.path);
 
-        Set<String> set = Stream.of(file.listFiles())
+        return Stream.of(Objects.requireNonNull(file.listFiles()))
                 .map(File::getName)
                 .filter(s -> s.length() > 4)
                 .map(s -> s.substring(0, s.length()-4))
                 .collect(Collectors.toSet());
-
-        return set;
     }
 
     static private String toPath(String filename) {
