@@ -1,5 +1,6 @@
 package agh.ics.oop.gui;
 
+import agh.ics.oop.Vector2d;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,14 +16,19 @@ public class AbstractElement {
     ImageView image;
     int displayPriority = 0;
     protected int health = 0;
+    private Vector2d position;
 
+    public Vector2d getPosition() {
+        return position;
+    }
 
-    protected AbstractElement(String file, int displayPriority) throws FileNotFoundException {
+    protected AbstractElement(String file, Vector2d position, int displayPriority) throws FileNotFoundException {
         Image imageImage = new Image(new FileInputStream("src/main/resources/" + file));
         this.displayPriority = displayPriority;
         image = new ImageView(imageImage);
         image.setFitWidth(30);
         image.setFitHeight(30);
+        this.position = position;
     }
 
     public Node getImage() {

@@ -36,11 +36,17 @@ public class MapStats {
     }
 
     public String getAvgEnergy() {
-        return Float.toString(avgEnergy);
+        if (Float.isFinite(avgEnergy) && !Float.isNaN(avgEnergy))
+            return Float.toString(avgEnergy);
+        else
+            return "-";
     }
 
     public String getAvgLifespan() {
-        return Float.toString(avgLifespan);
+        if (Float.isFinite(avgLifespan) && !Float.isNaN(avgLifespan))
+            return Float.toString(avgLifespan);
+        else
+            return "-";
     }
 
     public String getDeadAnimalsCount() {

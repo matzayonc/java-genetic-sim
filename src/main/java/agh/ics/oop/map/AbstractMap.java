@@ -86,7 +86,9 @@ public class AbstractMap {
     public int getEmpty(){
         int nonEmpty = 0;
         for (Field field : entries.values())
-            if(field.animals.isEmpty() || field.plants.isEmpty())
+            if(!field.animals.isEmpty() && field.animals.get(0).getPosition().positiveAndBelow(settings.getMapSize()))
+                nonEmpty++;
+            else if(!field.plants.isEmpty() && field.plants.get(0).getPosition().positiveAndBelow(settings.getMapSize()))
                 nonEmpty++;
 
         int size = settings.getMapSize().getX() * settings.getMapSize().getY();
@@ -190,7 +192,11 @@ public class AbstractMap {
                     }
 
                     try {
-                        Plant plant = new Plant();
+                        Plant plant = new Plant(position);
+                        if (position.getX() >= getSize().getX() || position.getY() >= getSize().getY()
+                                || position.getX() < 0 || position.getY() < 0)
+                            throw new IllegalArgumentException("Position out of map");
+
                         addPlant(plant, position); // allows for growth on top of other plants
                     } catch (IllegalArgumentException e) {
                         throw new RuntimeException(e);
@@ -201,7 +207,7 @@ public class AbstractMap {
             }
 
             try {
-                Plant plant = new Plant();
+                Plant plant = new Plant(position);
                 addPlant(plant, position); // allows for growth on top of other plants
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException(e);

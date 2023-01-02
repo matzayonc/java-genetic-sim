@@ -17,7 +17,6 @@ public class Genome {
         for (int i = 0; i < geneCount; i++) {
             genes.add(Direction.random());
         }
-
         setToRandom();
     }
 
@@ -40,15 +39,14 @@ public class Genome {
     }
 
     public Genome combine(Genome other, int proportion, Settings settings) {
-        List<Direction> combination = genes.subList(0, proportion);
-        combination.addAll(other.genes.subList(proportion, other.geneCount));
-
-        System.out.println("combination: " + combination +
-                "left: " + genes.subList(0, proportion) +
-                "right: " + other.genes.subList(proportion, other.geneCount)+
-                "proportion: " + proportion+
-                "l:"+ genes.size()+ ", r: " + other.genes.size());
-
+        List<Direction> combination = new ArrayList<>();
+        for (int i = 0; i < geneCount; i++) {
+            if (i < proportion) {
+                combination.add(genes.get(i));
+            } else {
+                combination.add(other.genes.get(i));
+            }
+        }
 
         int c = 0;
         while ((Math.random() < 0.6 || c++ < settings.getMinimumMutations()) && c < settings.getMaximumMutations()) {

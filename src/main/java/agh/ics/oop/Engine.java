@@ -18,14 +18,12 @@ public class Engine implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Engine started");
         while (true) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("Engine tick");
             maps.stream().forEach(AbstractMap::tick);
 
             for (Runnable task : refreshes) {

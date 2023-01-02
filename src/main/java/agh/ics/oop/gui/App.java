@@ -88,7 +88,6 @@ public class App extends Application {
         primaryStage.show();
 
         Runnable task = () -> {
-            System.out.println("Animals: " + map.getAnimalCount());
             refresh(box, grid, map);
         };
         engine.add(task, map);
@@ -102,7 +101,7 @@ public class App extends Application {
         for (int i = 0; i < map.getWidth(); i++) {
             for (int j = 0; j < map.getHeight(); j++) {
                 VBox box = new VBox();
-                box.setPrefSize(30, 30);
+                box.setPrefSize(30, 32);
 
                 AbstractElement getElement = map.getToShow(new Vector2d(i, j));
                 if (getElement == null) {

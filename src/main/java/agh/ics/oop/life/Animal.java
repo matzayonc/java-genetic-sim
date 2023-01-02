@@ -35,7 +35,7 @@ public class Animal extends AbstractElement {
     }
 
     public Animal(int creationTurn, Vector2d position, Settings settings) throws FileNotFoundException {
-        super("animal.png", 0);
+        super("animal.png", position,0);
         this.creationCycle = creationTurn;
         this.settings = settings;
         this.position = position;
@@ -45,7 +45,7 @@ public class Animal extends AbstractElement {
 
     public Animal(int creationTurn, Vector2d position, Settings settings, Genome genome)
     throws FileNotFoundException {
-        super("animal.png", 0);
+        super("animal.png", position, 0);
         this.creationCycle = creationTurn;
         this.settings = settings;
         this.position = position;
